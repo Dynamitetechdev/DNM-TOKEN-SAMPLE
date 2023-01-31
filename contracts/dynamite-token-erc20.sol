@@ -27,7 +27,7 @@ contract DNM is Context {
     uint32 constant _decimals = 8;
 
     constructor() {
-        _name = "DYNAMITE";
+        _name = "DYNAMITE-TOKEN";
         _symbol = "$DNM";
     }
 
