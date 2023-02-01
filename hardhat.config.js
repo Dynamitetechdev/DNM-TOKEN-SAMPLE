@@ -44,6 +44,12 @@ module.exports = {
     deployer: {
       default: 0,
     },
+    spender: {
+      default: 1,
+    },
+    receiver: {
+      default: 2,
+    },
   },
   mocha: {
     timeout: 4000000000,
