@@ -25,13 +25,13 @@ contract DNM is Context {
     string private _name;
     string private _symbol;
     uint256 private _totalSupply;
-    uint32 constant _decimals = 8;
+    uint32 constant _decimals = 18;
     uint256 private ownerMintToken;
 
     constructor() {
         _name = "DYNAMITE";
         _symbol = "$DNM";
-        ownerMintToken = 50e18;
+        ownerMintToken = 50000000000000000000;
     }
 
     function name() public view returns (string memory tokenName) {
@@ -148,8 +148,9 @@ contract DNM is Context {
         return true;
     }
 
-    function _mint(address account, uint256 amount) internal {
-        account = msgSender();
+    function _mint() internal {
+        address account = msgSender();
+        uint256 amount = ownerMintToken;
         if (account == address(0))
             revert DNM_zeroAddress("Zero Address Detected");
         _totalSupply += amount;
