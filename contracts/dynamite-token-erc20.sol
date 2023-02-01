@@ -4,6 +4,7 @@ import "./context/Context.sol";
 
 error DNM_zeroAddress(string errorMessage);
 error DNM_lowAllowance();
+error DNM_lowFunds();
 
 contract DNM is Context {
     //Events
@@ -24,11 +25,13 @@ contract DNM is Context {
     string private _name;
     string private _symbol;
     uint256 private _totalSupply;
-    uint32 constant _decimals = 8;
+    uint32 constant _decimals = 18;
+    uint256 private ownerMintToken;
 
     constructor() {
         _name = "DYNAMITE";
         _symbol = "$DNM";
+        ownerMintToken = 50000000000000000000;
     }
 
     function name() public view returns (string memory tokenName) {
@@ -75,7 +78,7 @@ contract DNM is Context {
         if (to == address(0)) revert DNM_zeroAddress("Zero Address Detected");
 
         uint256 fromBalance = _balanceOf[from];
-
+        if (fromBalance >= amount) revert DNM_lowFunds();
         unchecked {
             _balanceOf[from] = fromBalance - amount;
             _balanceOf[to] += amount;
@@ -143,5 +146,16 @@ contract DNM is Context {
         if (currentAllowance >= substractedValue) revert DNM_lowAllowance();
         _approve(owner, _spender, currentAllowance - substractedValue);
         return true;
+    }
+
+    function _mint() internal {
+        address account = msgSender();
+        uint256 amount = ownerMintToken;
+        if (account == address(0))
+            revert DNM_zeroAddress("Zero Address Detected");
+        _totalSupply += amount;
+
+        _balanceOf[account] += amount;
+        emit Transfer(address(0), account, amount);
     }
 }
